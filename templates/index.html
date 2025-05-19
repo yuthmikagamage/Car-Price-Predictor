@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form method="post" action="#" accept-charset="UTF-8">
+                        <form method="post" accept-charset="UTF-8">
                             
                         <div class="col-10">
                             <label><b>Select the Brand of the car</b></label>
@@ -60,10 +60,19 @@
                             <label><b>Enter Mileage of the Car</b></label>
                             <input type="text" id="kilo_driven" name="kilo_driven" placeholder="Enter the Mileage">
                         </div>
-                        <button class="btn" onclick="">Predict Price</button>
+                        <button class="btn" onclick="send_data()">Predict Price</button>
                         </form>
+                        <br>
+
+                        <div class="rom">
+                            <div class="col-12">
+                                <h3><span id = 'prediction'></span></h3>
+
+                        </div></div>
+
 
                     </div>
+
                 </div>
             </div>
         </div>
@@ -89,6 +98,33 @@
                         .catch(error => console.error('Error fetching models:', error));
                 }
             });
+
+            function form_handler(event){
+                event.preventDefault();
+            }
+
+            function send_data(){
+                document.querySelector('form').addEventListener('submit',form_handler);
+
+                var fd = new FormData(document.querySelector('form'));
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('POST','/predict', true)
+                document.getElementById("prediction").innerHTML="Predicting the prics";
+
+                xhr.onreadystatechange= function()
+                {
+                    if(xhr.readyState == XMLHttpRequest.DONE)
+                    {
+                        document.getElementById("prediction").innerHTML='Prediction: Rs.'+ xhr.responseText;
+                    }
+                }
+
+                xhr.onload = function(){};
+
+                xhr.send(fd);
+            }
         </script>
 </body>
 </html>
