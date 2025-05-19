@@ -7,11 +7,88 @@
 
     <title>Car Price Predictor</title>
 </head>
-<body>
-    <h1> Hellows World</h1>
+<body class="body">
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
-    
+
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-12">
+                            <h1> Welcome to Car Price Predictor SL </h1>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+                        <form method="post" action="#" accept-charset="UTF-8">
+                            
+                        <div class="col-10">
+                            <label><b>Select the Brand of the car</b></label>
+                            <select class="sekect" required="1" id="Brand" name="Brand">
+                                {% for brands in Brand %}
+                                    <option value="{{brands}}">{{brands}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                            <label><b>Select the Model of Selected Brand</b></label>
+                            <select class="sekect" required="1" id="Model" name="Model">
+                            <option value="">Select Model</option>
+                            </select>
+
+
+                        <div class="col-10">
+                            <label><b>Select the Manufacturing Year of Your Car</b></label>
+                            <select class="sekect" required="1" id="YOM" name="YOM">
+                                {% for years in  YOM%}
+                                <option value="{{years}}">{{years}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+
+                        <div class="col-10">
+                            <label><b>Select the Fuel Type of Your Car</b></label>
+                            <select class="sekect" required="1" id="Fuel_Type" name="Fuel_Type">
+                                {%for fules in Fuel_Type%}
+                                <option value="{{fules}}">{{fules}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+
+                        <div class="col-10">
+                            <label><b>Enter Mileage of the Car</b></label>
+                            <input type="text" id="kilo_driven" name="kilo_driven" placeholder="Enter the Mileage">
+                        </div>
+                        <button class="btn" onclick="">Predict Price</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('Brand').addEventListener('change', function() {
+                const brandValue = this.value;
+                const modelDropdown = document.getElementById('Model');
+                
+                modelDropdown.innerHTML = '<option value="">Select Model</option>';
+                
+                if (brandValue) {
+                    fetch('/get_models/' + brandValue)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.models.forEach(model => {
+                                const option = document.createElement('option');
+                                option.value = model;
+                                option.textContent = model;
+                                modelDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching models:', error));
+                }
+            });
+        </script>
 </body>
 </html>
