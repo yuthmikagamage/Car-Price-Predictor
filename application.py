@@ -25,12 +25,27 @@ def get_models(brand):
 @app.route('/predict',methods=['POST'])
 def predict():
     Brand = request.form.get('Brand')
-    Model = request.form.get('Model')
+    
     YOM = int(request.form.get('YOM'))
     Fuel_Type = request.form.get('Fuel_Type')
-    Mileage = int(request.form.get('kilo_driven'))
+
+    try:
+        Model = request.form.get('Model')
+        if Model == "":
+            return "Select Model of the Car"
+        
+        Mileage = int(request.form.get('kilo_driven'))
+        if Mileage<=0:
+            return "Mileage Must Be Greater Than Zero",400
+        
+
+    
+
+    except ValueError:
+        return "Invalid Input Try Again",400
+    
     prediction = model.predict(pd.DataFrame([[Model,Brand,YOM,Mileage,Fuel_Type]],columns=['Model','Brand','YOM','Millage(KM)','Fuel Type']))
-    return str(np.round(prediction[0]))
+    return "Prediction: Rs." + str(np.round(prediction[0]))
 
 
 
