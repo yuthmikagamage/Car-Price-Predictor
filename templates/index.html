@@ -23,19 +23,20 @@
 
                         <form method="post" accept-charset="UTF-8">
                             
-                        <div class="col-10">
-                            <label><b>Select the Brand of the car</b></label>
-                            <select class="sekect" required="1" id="Brand" name="Brand">
-                                {% for brands in Brand %}
-                                    <option value="{{brands}}">{{brands}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <div class="col-10">
+                                <label><b>Select the Brand of the car</b></label>
+                                <select class="sekect" required="1" id="Brand" name="Brand">
+                                    <option value="">Select Brand</option>  
+                                    {% for brands in Brand %}
+                                        <option value="{{brands}}">{{brands}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                            <label><b>Select the Model of Selected Brand</b></label>
-                            <select class="sekect" required="1" id="Model" name="Model">
+                        <label><b>Select the Model of Selected Brand</b></label>
+                        <select class="sekect" required="1" id="Model" name="Model">
                             <option value="">Select Model</option>
-                            </select>
+                        </select>
 
 
                         <div class="col-10">
