@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <title>Car Price Predictor</title>
+</head>
+<body class="body">
+
+
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-12">
+                            <h1> Welcome to Car Price Predictor Sri Lanka </h1>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+                        <form method="post" accept-charset="UTF-8">
+                            
+                            <div class="col-10">
+                                <label><b>Select the Brand of the car</b></label>
+                                <select class="sekect" required="1" id="Brand" name="Brand">
+                                    <option value="">Select Brand</option>  
+                                    {% for brands in Brand %}
+                                        <option value="{{brands}}">{{brands}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        <label><b>Select the Model of Selected Brand</b></label>
+                        <select class="sekect" required="1" id="Model" name="Model">
+                            <option value="">Select Model</option>
+                        </select>
+
+
+                        <div class="col-10">
+                            <label><b>Select the Manufacturing Year of Your Car</b></label>
+                            <select class="sekect" required="1" id="YOM" name="YOM">
+                                {% for years in  YOM%}
+                                <option value="{{years}}">{{years}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+
+                        <div class="col-10">
+                            <label><b>Select the Fuel Type of Your Car</b></label>
+                            <select class="sekect" required="1" id="Fuel_Type" name="Fuel_Type">
+                                {%for fules in Fuel_Type%}
+                                <option value="{{fules}}">{{fules}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+
+                        <div class="col-10">
+                            <label><b>Enter Mileage of the Car</b></label>
+                            <input type="text" id="kilo_driven" name="kilo_driven" placeholder="Enter the Mileage">
+                        </div>
+                        <button class="btn" onclick="send_data()">Predict Price</button>
+                        </form>
+                        <br>
+
+                        <div class="rom">
+                            <div class="col-12">
+                                <h3><span id = 'prediction'></span></h3>
+
+                        </div></div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('Brand').addEventListener('change', function() {
+                const brandValue = this.value;
+                const modelDropdown = document.getElementById('Model');
+                
+                modelDropdown.innerHTML = '<option value="">Select Model</option>';
+                
+                if (brandValue) {
+                    fetch('/get_models/' + brandValue)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.models.forEach(model => {
+                                const option = document.createElement('option');
+                                option.value = model;
+                                option.textContent = model;
+                                modelDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching models:', error));
+                }
+            });
+
+            function form_handler(event){
+                event.preventDefault();
+            }
+
+            function send_data(){
+                document.querySelector('form').addEventListener('submit',form_handler);
+
+                var fd = new FormData(document.querySelector('form'));
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('POST','/predict', true)
+                document.getElementById("prediction").innerHTML="Predicting the prics";
+
+                xhr.onreadystatechange= function()
+                {
+                    if(xhr.readyState == XMLHttpRequest.DONE)
+                    {
+                        document.getElementById("prediction").innerHTML= xhr.responseText;
+                    }
+                }
+
+                xhr.onload = function(){};
+
+                xhr.send(fd);
+            }
+        </script>
+</body>
+</html>
